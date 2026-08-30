@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GCN — the Geometric Computation Network</title>
+<meta name="description" content="Distributed computing whose state is a number: lossless folds, digit-striped shards, golden-angle placement, and absence that is named rather than papered over. Public domain, prior art.">
+<style>
+:root{
+  --bg:#f7f8fb; --ink:#161a2b; --muted:#4e5675; --accent:#3730a3; --accent-2:#4f46e5;
+  --card:#ffffff; --line:#dbdfec; --mono-bg:#eef0f7; --good:#15803d; --warn:#b45309; --bad:#b91c1c;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0d1020; --ink:#e4e7f4; --muted:#9aa3c4; --accent:#818cf8; --accent-2:#a5b4fc;
+  --card:#141830; --line:#252b4d; --mono-bg:#111530; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 "Iowan Old Style","Palatino Linotype",Georgia,serif}
+.banner{background:var(--accent);color:var(--bg);font:600 12px/1.4 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:10px 20px;text-align:center}
+main{max-width:72ch;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:2.3rem;line-height:1.15;margin:.4em 0 .2em;text-wrap:balance}
+h2{font-size:1.25rem;margin:2.2em 0 .5em;color:var(--accent);letter-spacing:.01em}
+.kicker{font:600 13px/1.5 system-ui,sans-serif;color:var(--muted);letter-spacing:.09em;text-transform:uppercase}
+.lede{font-size:1.12rem;color:var(--muted)}
+a{color:var(--accent-2)}
+code,.mono{font:13.5px/1.6 ui-monospace,Consolas,monospace;background:var(--mono-bg);border-radius:4px;padding:1px 5px}
+.law{background:var(--mono-bg);border-left:3px solid var(--accent);border-radius:6px;padding:12px 16px;font:14px/1.7 ui-monospace,Consolas,monospace;overflow-x:auto;white-space:pre}
+.demo{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:1.4em 0;font-family:system-ui,sans-serif}
+.demo h3{margin:0 0 6px;font-size:1rem;color:var(--accent)}
+.demo p{font-size:14px;color:var(--muted);margin:.3em 0 1em}
+button{font:600 14px system-ui,sans-serif;background:var(--accent);color:var(--bg);border:0;border-radius:8px;padding:9px 16px;cursor:pointer}
+button:hover{background:var(--accent-2)}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+input[type=text]{font:14px ui-monospace,monospace;background:var(--mono-bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%}
+label{font:13px system-ui,sans-serif;color:var(--muted);display:block;margin:8px 0 3px}
+.shards{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+.shardchip{font:12px/1.5 ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--mono-bg)}
+.shardchip.lost{opacity:.35;text-decoration:line-through}
+.out{font:13.5px/1.7 ui-monospace,Consolas,monospace;background:var(--mono-bg);border-radius:8px;padding:12px 14px;margin-top:12px;overflow-x:auto;min-height:1.5em;white-space:pre-wrap;word-break:break-all}
+footer{border-top:1px solid var(--line);margin-top:48px;padding-top:18px;font:13px/1.7 system-ui,sans-serif;color:var(--muted)}
+.honest{border:1px solid var(--line);border-radius:12px;padding:4px 18px;margin:1em 0;background:var(--card)}
+@media (prefers-reduced-motion: no-preference){button{transition:background .15s}}
+</style>
+</head>
+<body>
+<div class="banner">Defensive publication · disclosed 30 August 2026 · CC0-1.0 · this page is prior art</div>
+<main>
+<p class="kicker">Publication IV of the edge-AI family · drafted with sididy</p>
+<h1>The Geometric Computation Network</h1>
+<p class="lede">A distributed computing fabric whose working state <em>is a number</em>. State folds
+losslessly to one integer; the integer shards by digit-striping across a mesh; shards land on nodes
+by the golden angle, which provably never clusters; and reassembly is exact, order-free, and loud
+about absence — a missing shard is <strong>named, never interpolated</strong>.</p>
+
+<p>No coordinator, no hash ring to rebalance, nothing to disagree about: the state either
+reassembles to the number that left, or the fabric says which piece is missing. Drafted with
+sididy, the estate's resident local mind, from Thomas Frumkin's Konomi geometric stack. The
+document of record is the
+<a href="https://github.com/sjgant80-hub/gcn-geometric-computation-network">README of this
+repository</a>; this page carries the 33/33 mutation-gated reference law, runnable below.</p>
+
+<h2>1 · State as a number</h2>
+<p>A machine state — a list of integers — becomes one integer in base 65537 behind a sentinel
+digit, so leading zeros and length survive. A state that is a number inherits arithmetic for free:
+equality is <code>===</code>, a signature signs one value. The full research codec (primorial
+folds, entropic torus harmonics) is the estate's
+<a href="https://github.com/sjgant80-hub/geometric-computer">geometric-computer</a>, gated.</p>
+
+<h2>2 · Sharding by digit-stripe</h2>
+<div class="law">shard i of k takes digits i, i+k, i+2k …
+each shard is itself a sentinel-guarded fold, its index aboard
+→ reassembles in ANY order
+→ "incomplete: 2 of 3 shards — the missing piece is not guessable"
+→ duplicates, alien shards, and i === k are each refused by name</div>
+
+<h2>3 · Placement by golden angle</h2>
+<p>Shard <em>s</em> lands at angle <code>s·(1−1/φ) mod 1</code> around the node ring —
+deterministic, so any node computes any placement with zero coordination, and golden-angle
+sequences never cluster for any n
+(<a href="https://github.com/sjgant80-hub/golden-placer">golden-placer</a>, the estate's
+provably-novel primitive). Consistent hashing without virtual nodes or rebalancing.</p>
+
+<h2>4 · Why this is a computation network</h2>
+<p>With state-as-number as the invariant, the rest of this disclosure family snaps in:
+<a href="https://sjgant80-hub.github.io/mctp-multi-carrier-transport/">MCTP</a> frames carry shards
+over sound, radio or light; <a href="https://github.com/sjgant80-hub/chorus">chorus</a> walls gate
+which node may submit which shard;
+<a href="https://sjgant80-hub.github.io/proof-carrying-models/">proof-carrying-models</a> attests
+which fold a result came from. A mesh of small devices holds and hands around computations none
+could hold alone — every hop refusable, every absence named.</p>
+
+<div class="demo">
+<h3>Run the reference law — fold, shard, lose a piece</h3>
+<p>A machine state as integers. Fold it to one number, stripe it across 3 shards placed on 5
+nodes, then lose shard 1 and watch the fabric name it.</p>
+<label for="gstate">state (comma-separated integers, 0–65535)</label>
+<input type="text" id="gstate" value="7, 0, 42, 1000, 65535, 3">
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+<button id="goBtn">fold → shard ×3 → place → reassemble</button>
+<button id="loseBtn" class="ghost">the same, but shard 1 is lost</button>
+</div>
+<div class="shards" id="gshards"></div>
+<div class="out" id="gOut">the fabric will report here</div>
+</div>
+
+<h2>What already runs · what must catch up</h2>
+<div class="honest">
+<p><strong>Gated and live today:</strong> the reference law in this page (33/33 mutants killed) ·
+geometric-computer · golden-placer · the-cam · the-kg · the-rotor — each mutation-gated in
+public CI.</p>
+<p><strong>The honest speculation:</strong> BigInt folding of megabyte states needs hardware or
+chunking (shards ARE chunks; the silicon is not ours to build) · parity/erasure stripes are future
+work — this law names a missing shard, it does not recover one · rotors at network scale are
+years out. <strong>Not claimed:</strong> performance numbers against DHTs or erasure systems — the
+claim is the composition, with no coordinator.</p>
+</div>
+
+<h2>Claims anticipated</h2>
+<p>Distributed machine state as a single arbitrary-precision integer for transfer, checkpoint or
+verification · digit-striped sharding with per-shard sentinel integrity and order-free reassembly ·
+refusal-with-naming of missing or alien shards · golden-angle/irrational-rotation placement of
+shards or tasks · coordinator-free meshes composing these.
+<strong>Prior art here, dated by first commit.</strong></p>
+
+<footer>
+<p>Built on the <strong>Konomi architecture</strong>, created by <strong>Thomas Frumkin</strong>
+(<a href="https://konomi-systems.com">konomi-systems.com</a>) — lineage Thomas → Jim → Simon.
+The estate builds WITH Konomi. Drafted with sididy, the estate's resident mind. Published CC0-1.0 —
+no rights reserved, deliberately.
+<a href="https://sjgant80-hub.github.io/fallworld/">The estate</a>.</p>
+</footer>
+</main>
+<script>
+/*__KERNEL_START__*/
+/*__KERNEL_END__*/
+(function(){
+  const G=window.GCN, NODES=['ash','birch','cedar','doyle','elm'];
+  const readState=()=>{
+    const raw=document.getElementById('gstate').value.split(',').map(s=>s.trim()).filter(s=>s.length);
+    return raw.map(s=>/^[0-9]+$/.test(s)?parseInt(s,10):s);
+  };
+  const run=(lose)=>{
+    const out=document.getElementById('gOut'), chips=document.getElementById('gshards');
+    chips.innerHTML='';
+    const f=G.fold(readState());
+    if(!f.ok){out.textContent='FOLD REFUSED: '+f.why;return}
+    const s=G.shard(f.n,3);
+    const kept=[];
+    s.shards.forEach(sh=>{
+      const p=G.place(sh.i,NODES);
+      const chip=document.createElement('span');chip.className='shardchip'+(lose&&sh.i===1?' lost':'');
+      chip.textContent='shard '+sh.i+' → '+p.node+' ('+sh.n.length+' digits)';
+      chips.appendChild(chip);
+      if(!(lose&&sh.i===1)) kept.push(sh);
+    });
+    const r=G.reassemble(kept);
+    if(!r.ok){out.textContent='the state as one integer:\n'+f.n+'\n\nREASSEMBLY: '+r.why;return}
+    const u=G.unfold(r.n);
+    out.textContent='the state as one integer:\n'+f.n+'\n\nreassembled (any order) → '+
+      (r.n===f.n?'EXACT ✓':'BROKEN ✗')+'\nunfolds to ['+u.state.join(', ')+']';
+  };
+  document.getElementById('goBtn').addEventListener('click',()=>run(false));
+  document.getElementById('loseBtn').addEventListener('click',()=>run(true));
+})();
+</script>
+</body>
+</html>
